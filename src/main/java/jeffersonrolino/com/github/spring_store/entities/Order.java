@@ -1,8 +1,9 @@
 package jeffersonrolino.com.github.spring_store.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "tb_order")
@@ -10,13 +11,19 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime moment;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+    private Instant moment;
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
 
     public Order() {
+    }
+
+    public Order(Long id, Instant moment, User client) {
+        this.id = id;
+        this.moment = moment;
+        this.client = client;
     }
 
     public Long getId() {
@@ -27,11 +34,11 @@ public class Order {
         this.id = id;
     }
 
-    public LocalDateTime getMoment() {
+    public Instant getMoment() {
         return moment;
     }
 
-    public void setMoment(LocalDateTime moment) {
+    public void setMoment(Instant moment) {
         this.moment = moment;
     }
 
