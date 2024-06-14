@@ -15,5 +15,4 @@ public class UserController {
         User user = new User(1L, "Maria", "maria@gmail.com", "41997452344", "123");
         return ResponseEntity.ok().body(user);
     }
-
 }
