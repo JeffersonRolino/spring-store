@@ -1,14 +1,8 @@
 package jeffersonrolino.com.github.spring_store.config;
 
-import jeffersonrolino.com.github.spring_store.entities.Category;
-import jeffersonrolino.com.github.spring_store.entities.Order;
-import jeffersonrolino.com.github.spring_store.entities.Product;
-import jeffersonrolino.com.github.spring_store.entities.User;
+import jeffersonrolino.com.github.spring_store.entities.*;
 import jeffersonrolino.com.github.spring_store.entities.enums.OrderStatus;
-import jeffersonrolino.com.github.spring_store.repositories.CategoryRepository;
-import jeffersonrolino.com.github.spring_store.repositories.OrderRepository;
-import jeffersonrolino.com.github.spring_store.repositories.ProductRepository;
-import jeffersonrolino.com.github.spring_store.repositories.UserRepository;
+import jeffersonrolino.com.github.spring_store.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -24,13 +18,21 @@ public class TestConfig implements CommandLineRunner {
     private final OrderRepository orderRepository;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final OrderItemRepository orderItemRepository;
 
 
-    public TestConfig(final UserRepository userRepository, final OrderRepository orderRepository, final CategoryRepository categoryRepository,  final ProductRepository productRepository) {
+    public TestConfig(
+            final UserRepository userRepository,
+            final OrderRepository orderRepository,
+            final CategoryRepository categoryRepository,
+            final ProductRepository productRepository,
+            final OrderItemRepository orderItemRepository
+    ) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -69,5 +71,12 @@ public class TestConfig implements CommandLineRunner {
         Order order3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.WAITING_PAYMENT, user1);
 
         orderRepository.saveAll(Arrays.asList(order1, order2, order3));
+
+        OrderItem orderItem1 = new OrderItem(order1, product1, 2, product1.getPrice());
+        OrderItem orderItem2 = new OrderItem(order1, product3, 1, product3.getPrice());
+        OrderItem orderItem3 = new OrderItem(order2, product3, 2, product3.getPrice());
+        OrderItem orderItem4 = new OrderItem(order3, product5, 2, product5.getPrice());
+
+        orderItemRepository.saveAll(Arrays.asList(orderItem1, orderItem2, orderItem3, orderItem4));
     }
 }

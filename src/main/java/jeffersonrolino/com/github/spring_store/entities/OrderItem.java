@@ -1,5 +1,6 @@
 package jeffersonrolino.com.github.spring_store.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -9,7 +10,7 @@ import jeffersonrolino.com.github.spring_store.entities.pk.OrderItemPK;
 @Table(name = "tb_order_item")
 public class OrderItem {
     @EmbeddedId
-    private OrderItemPK id;
+    private OrderItemPK id = new OrderItemPK();
     private Integer quantity;
     private Double price;
 
@@ -24,6 +25,7 @@ public class OrderItem {
         this.price = price;
     }
 
+    @JsonIgnore
     public Order getOrder(){
         return this.id.getOrder();
     }
