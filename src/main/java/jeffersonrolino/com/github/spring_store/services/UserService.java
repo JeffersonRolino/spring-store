@@ -2,6 +2,7 @@ package jeffersonrolino.com.github.spring_store.services;
 
 import jeffersonrolino.com.github.spring_store.entities.User;
 import jeffersonrolino.com.github.spring_store.repositories.UserRepository;
+import jeffersonrolino.com.github.spring_store.services.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class UserService {
 
     public User findById(Long id){
         Optional<User> optionalUser = userRepository.findById(id);
-        return optionalUser.get();
+        return optionalUser.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public User insert(User user){
