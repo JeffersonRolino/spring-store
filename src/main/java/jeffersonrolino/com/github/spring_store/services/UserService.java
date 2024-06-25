@@ -1,5 +1,6 @@
 package jeffersonrolino.com.github.spring_store.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import jeffersonrolino.com.github.spring_store.entities.User;
 import jeffersonrolino.com.github.spring_store.repositories.UserRepository;
 import jeffersonrolino.com.github.spring_store.services.exceptions.DatabaseException;
@@ -43,9 +44,13 @@ public class UserService {
     }
 
     public User update(Long id, User user){
-        User entity = userRepository.getReferenceById(id);
-        updateData(entity, user);
-        return userRepository.save(entity);
+        try {
+            User entity = userRepository.getReferenceById(id);
+            updateData(entity, user);
+            return userRepository.save(entity);
+        } catch (EntityNotFoundException exception){
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User entity, User user) {
