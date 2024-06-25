@@ -2,7 +2,10 @@ package jeffersonrolino.com.github.spring_store.services;
 
 import jeffersonrolino.com.github.spring_store.entities.User;
 import jeffersonrolino.com.github.spring_store.repositories.UserRepository;
+import jeffersonrolino.com.github.spring_store.services.exceptions.DatabaseException;
 import jeffersonrolino.com.github.spring_store.services.exceptions.ResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +33,13 @@ public class UserService {
     }
 
     public void delete(Long id){
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseException(exception.getMessage());
+        }
     }
 
     public User update(Long id, User user){
